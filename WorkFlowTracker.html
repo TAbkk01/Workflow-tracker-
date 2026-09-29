@@ -1,0 +1,920 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2775.1">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #8486ff; -webkit-text-stroke: #8486ff}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #fc7dd1; -webkit-text-stroke: #fc7dd1}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #fed611; -webkit-text-stroke: #fed611}
+    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #53d160; -webkit-text-stroke: #53d160}
+    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #ffffff; -webkit-text-stroke: #ffffff}
+    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #ffffff; -webkit-text-stroke: #ffffff; min-height: 16.0px}
+    p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #626262; -webkit-text-stroke: #626262}
+    span.s1 {font-kerning: none; background-color: #101010}
+    span.s2 {font-kerning: none; color: #ffffff; background-color: #101010; -webkit-text-stroke: 0px #ffffff}
+    span.s3 {font-kerning: none; color: #626262; background-color: #101010; -webkit-text-stroke: 0px #626262}
+    span.s4 {font-kerning: none; color: #fed611; background-color: #101010; -webkit-text-stroke: 0px #fed611}
+    span.s5 {font-kerning: none; color: #53d160; background-color: #101010; -webkit-text-stroke: 0px #53d160}
+    span.s6 {font-kerning: none; color: #fc7dd1; background-color: #101010; -webkit-text-stroke: 0px #fc7dd1}
+    span.s7 {font-kerning: none}
+    span.s8 {font-kerning: none; color: #8486ff; background-color: #101010; -webkit-text-stroke: 0px #8486ff}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!DOCTYPE</span><span class="s2"> html</span><span class="s1">&gt;</span></p>
+<p class="p2"><span class="s3">&lt;</span><span class="s1">html</span><span class="s2"> </span><span class="s4">lang</span><span class="s3">=</span><span class="s5">"en"</span><span class="s3">&gt;</span></p>
+<p class="p2"><span class="s3">&lt;</span><span class="s1">head</span><span class="s3">&gt;</span></p>
+<p class="p3"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s3">&lt;</span><span class="s6">meta</span><span class="s2"> </span><span class="s1">charset</span><span class="s3">=</span><span class="s5">"UTF-8"</span><span class="s2"> </span><span class="s3">/&gt;</span></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s3">&lt;</span><span class="s6">meta</span><span class="s2"> </span><span class="s4">name</span><span class="s3">=</span><span class="s1">"viewport"</span><span class="s2"> </span><span class="s4">content</span><span class="s3">=</span><span class="s1">"width=device-width, initial-scale=1.0"</span><span class="s3">/&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">  </span></span><span class="s3">&lt;</span><span class="s6">title</span><span class="s3">&gt;</span><span class="s1">Real-Time Collaborative Workflow Tracker</span><span class="s3">&lt;/</span><span class="s6">title</span><span class="s3">&gt;</span></p>
+<p class="p6"><span class="s1"><span class="Apple-converted-space">  </span></span></p>
+<p class="p7"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s1">&lt;!-- Tailwind CSS --&gt;</span></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s3">&lt;</span><span class="s6">script</span><span class="s2"> </span><span class="s4">src</span><span class="s3">=</span><span class="s1">"https://cdn.tailwindcss.com"</span><span class="s3">&gt;&lt;/</span><span class="s6">script</span><span class="s3">&gt;</span></p>
+<p class="p6"><span class="s1"><span class="Apple-converted-space">  </span></span></p>
+<p class="p7"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s1">&lt;!-- React &amp; ReactDOM --&gt;</span></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s3">&lt;</span><span class="s6">script</span><span class="s2"> </span><span class="s4">src</span><span class="s3">=</span><span class="s1">"https://unpkg.com/react@18/umd/react.production.min.js"</span><span class="s2"> </span><span class="s4">crossorigin</span><span class="s3">&gt;&lt;/</span><span class="s6">script</span><span class="s3">&gt;</span></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s3">&lt;</span><span class="s6">script</span><span class="s2"> </span><span class="s4">src</span><span class="s3">=</span><span class="s1">"https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"</span><span class="s2"> </span><span class="s4">crossorigin</span><span class="s3">&gt;&lt;/</span><span class="s6">script</span><span class="s3">&gt;</span></p>
+<p class="p6"><span class="s1"><span class="Apple-converted-space">  </span></span></p>
+<p class="p7"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s1">&lt;!-- Babel --&gt;</span></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s3">&lt;</span><span class="s6">script</span><span class="s2"> </span><span class="s4">src</span><span class="s3">=</span><span class="s1">"https://unpkg.com/@babel/standalone/babel.min.js"</span><span class="s3">&gt;&lt;/</span><span class="s6">script</span><span class="s3">&gt;</span></p>
+<p class="p6"><span class="s1"><span class="Apple-converted-space">  </span></span></p>
+<p class="p7"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s1">&lt;!-- Lucide Icons (Vanilla JS build) --&gt;</span></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s3">&lt;</span><span class="s6">script</span><span class="s2"> </span><span class="s4">src</span><span class="s3">=</span><span class="s1">"https://unpkg.com/lucide@latest"</span><span class="s3">&gt;&lt;/</span><span class="s6">script</span><span class="s3">&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s3">&lt;</span><span class="s1">style</span><span class="s3">&gt;</span></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s8">@import</span><span class="s2"> </span><span class="s1">url</span><span class="s3">(</span><span class="s1">'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap'</span><span class="s3">);</span></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s6">body</span><span class="s2"> </span><span class="s3">{</span><span class="s2"> </span><span class="s4">font-family:</span><span class="s2"> </span><span class="s1">'Inter'</span><span class="s3">,</span><span class="s2"> </span><span class="s1">sans-serif</span><span class="s3">;</span><span class="s2"> </span><span class="s3">}</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s3">&lt;/</span><span class="s1">style</span><span class="s3">&gt;</span></p>
+<p class="p2"><span class="s3">&lt;/</span><span class="s1">head</span><span class="s3">&gt;</span></p>
+<p class="p4"><span class="s3">&lt;</span><span class="s6">body</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-slate-100 text-slate-800 antialiased min-h-screen"</span><span class="s3">&gt;</span></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"root"</span><span class="s3">&gt;&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s3">&lt;</span><span class="s6">script</span><span class="s2"> </span><span class="s4">type</span><span class="s3">=</span><span class="s1">"module"</span><span class="s3">&gt;</span></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s8">import</span><span class="s2"> </span><span class="s3">{</span><span class="s2"> initializeApp </span><span class="s3">}</span><span class="s2"> </span><span class="s8">from</span><span class="s2"> </span><span class="s1">"https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"</span><span class="s3">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s8">import</span><span class="s1"> </span><span class="s3">{</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>getAuth</span><span class="s3">,</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>signInAnonymously</span><span class="s3">,</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>signInWithCustomToken</span><span class="s3">,</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>onAuthStateChanged<span class="Apple-converted-space"> </span></span></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">}</span><span class="s2"> </span><span class="s8">from</span><span class="s2"> </span><span class="s1">"https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"</span><span class="s3">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s8">import</span><span class="s1"> </span><span class="s3">{</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>getFirestore</span><span class="s3">,</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>collection</span><span class="s3">,</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>doc</span><span class="s3">,</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>setDoc</span><span class="s3">,</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>addDoc</span><span class="s3">,</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>updateDoc</span><span class="s3">,</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>deleteDoc</span><span class="s3">,</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>onSnapshot<span class="Apple-converted-space"> </span></span></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">}</span><span class="s2"> </span><span class="s8">from</span><span class="s2"> </span><span class="s1">"https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"</span><span class="s3">;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s8">import</span><span class="s1"> </span><span class="s3">{</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>getStorage</span><span class="s3">,</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>ref</span><span class="s3">,</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>uploadBytes</span><span class="s3">,</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>getDownloadURL<span class="Apple-converted-space"> </span></span></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">}</span><span class="s2"> </span><span class="s8">from</span><span class="s2"> </span><span class="s1">"https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js"</span><span class="s3">;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p7"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">// Firebase configuration fallback</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s8">const</span><span class="s1"> firebaseConfig </span><span class="s3">=</span><span class="s1"> </span><span class="s8">typeof</span><span class="s1"> __firebase_config </span><span class="s3">!==</span><span class="s1"> </span><span class="s5">'undefined'</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s3">?</span><span class="s1"> </span><span class="s6">JSON</span><span class="s3">.</span><span class="s1">parse</span><span class="s3">(</span><span class="s1">__firebase_config</span><span class="s3">)</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span></span><span class="s3">:</span><span class="s1"> </span><span class="s3">{</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>apiKey</span><span class="s3">:</span><span class="s1"> </span><span class="s5">"demo-api-key"</span><span class="s3">,</span></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>authDomain</span><span class="s3">:</span><span class="s2"> </span><span class="s1">"demo-project.firebaseapp.com"</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>projectId</span><span class="s3">:</span><span class="s1"> </span><span class="s5">"demo-project"</span><span class="s3">,</span></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>storageBucket</span><span class="s3">:</span><span class="s2"> </span><span class="s1">"demo-project.appspot.com"</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>messagingSenderId</span><span class="s3">:</span><span class="s1"> </span><span class="s5">"123456789"</span><span class="s3">,</span></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>appId</span><span class="s3">:</span><span class="s2"> </span><span class="s1">"1:123456789:web:demo"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">};</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s8">const</span><span class="s1"> app </span><span class="s3">=</span><span class="s1"> initializeApp</span><span class="s3">(</span><span class="s1">firebaseConfig</span><span class="s3">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s8">const</span><span class="s1"> auth </span><span class="s3">=</span><span class="s1"> getAuth</span><span class="s3">(</span><span class="s1">app</span><span class="s3">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s8">const</span><span class="s1"> db </span><span class="s3">=</span><span class="s1"> getFirestore</span><span class="s3">(</span><span class="s1">app</span><span class="s3">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s8">const</span><span class="s1"> storage </span><span class="s3">=</span><span class="s1"> getStorage</span><span class="s3">(</span><span class="s1">app</span><span class="s3">);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s8">const</span><span class="s1"> appId </span><span class="s3">=</span><span class="s1"> </span><span class="s8">typeof</span><span class="s1"> __app_id </span><span class="s3">!==</span><span class="s1"> </span><span class="s5">'undefined'</span><span class="s1"> </span><span class="s3">?</span><span class="s1"> __app_id </span><span class="s3">:</span><span class="s1"> </span><span class="s5">'shared-workflow-app'</span><span class="s3">;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span>window</span><span class="s3">.</span><span class="s1">FirebaseServices</span><span class="s2"> </span><span class="s3">=</span><span class="s2"> </span><span class="s3">{</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>auth</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>db</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>storage</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>appId</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>signInAnonymously</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>signInWithCustomToken</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>onAuthStateChanged</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>collection</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>doc</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>setDoc</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>addDoc</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>updateDoc</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>deleteDoc</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>onSnapshot</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>ref</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>uploadBytes</span><span class="s3">,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>getDownloadURL</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">};</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s3">&lt;/</span><span class="s1">script</span><span class="s3">&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p4"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s3">&lt;</span><span class="s6">script</span><span class="s2"> </span><span class="s4">type</span><span class="s3">=</span><span class="s1">"text/babel"</span><span class="s3">&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>const { useState, useEffect, useMemo, useRef } = React;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>const STAGES = [</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>{ id: 'backlog', name: 'Backlog', badge: 'bg-slate-200 text-slate-800' },</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>{ id: 'in_progress', name: 'In Progress', badge: 'bg-blue-100 text-blue-800' },</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>{ id: 'in_review', name: 'In Review', badge: 'bg-amber-100 text-amber-800' },</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>{ id: 'completed', name: 'Approved &amp; Completed', badge: 'bg-emerald-100 text-emerald-800' }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>];</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>const PRIORITIES = {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>low: { label: 'Low', color: 'bg-slate-100 text-slate-700 border-slate-200', order: 1 },</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>medium: { label: 'Medium', color: 'bg-blue-100 text-blue-700 border-blue-200', order: 2 },</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>high: { label: 'High', color: 'bg-amber-100 text-amber-700 border-amber-200', order: 3 },</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>urgent: { label: 'Urgent', color: 'bg-rose-100 text-rose-700 border-rose-200', order: 4 }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>};</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>const FREQUENCIES = {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>daily: { label: 'Daily', badge: 'bg-indigo-100 text-indigo-700 border-indigo-200' },</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>weekly: { label: 'Weekly', badge: 'bg-purple-100 text-purple-700 border-purple-200' },</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>monthly: { label: 'Monthly', badge: 'bg-teal-100 text-teal-700 border-teal-200' }</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>};</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>function App() {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [user, setUser] = useState(null);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [boardId, setBoardId] = useState('main-team-board');</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [boardInput, setBoardInput] = useState('');</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [tasks, setTasks] = useState([]);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [loading, setLoading] = useState(true);</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [activeTab, setActiveTab] = useState('main');<span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [viewMode, setViewMode] = useState('kanban');<span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [recurringFrequency, setRecurringFrequency] = useState('all');</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [searchQuery, setSearchQuery] = useState('');</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [selectedStatus, setSelectedStatus] = useState('all');</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [selectedPriority, setSelectedPriority] = useState('all');</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [selectedAssignee, setSelectedAssignee] = useState('all');</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [isModalOpen, setIsModalOpen] = useState(false);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [editingTask, setEditingTask] = useState(null);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [submittingTask, setSubmittingTask] = useState(null);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [reviewingTask, setReviewingTask] = useState(null);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [taskToDelete, setTaskToDelete] = useState(null);</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>// Refresh Lucide icon rendering on component updates</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>useEffect(() =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>if (window.lucide) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>window.lucide.createIcons();</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>});</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>// Authenticate User</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>useEffect(() =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>const { auth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } = window.FirebaseServices;</span></p>
+<p class="p6"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>const initAuth = async () =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>try {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>if (typeof __initial_auth_token !== 'undefined' &amp;&amp; __initial_auth_token) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>await signInWithCustomToken(auth, __initial_auth_token);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>} else {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>await signInAnonymously(auth);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>} catch (e) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>console.error("Auth initialization error:", e);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>};</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>initAuth();</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>const unsubscribe = onAuthStateChanged(auth, (currentUser) =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>setUser(currentUser);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>return () =&gt; unsubscribe();</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>}, []);</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>// Real-time Firestore Sync</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>useEffect(() =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>if (!user) return;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>const { db, appId, collection, onSnapshot } = window.FirebaseServices;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>// Path following Rule 1: /artifacts/{appId}/public/data/tasks</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>const tasksCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'tasks');</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>setLoading(true);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>const unsubscribe = onSnapshot(tasksCollectionRef, (snapshot) =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>const loadedTasks = snapshot.docs.map(doc =&gt; ({</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>id: doc.id,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>...doc.data()</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>})).filter(task =&gt; !task.boardId || task.boardId === boardId);</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>setTasks(loadedTasks);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>setLoading(false);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}, (error) =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>console.error("Real-time listener error:", error);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>setLoading(false);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>return () =&gt; unsubscribe();</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>}, [user, boardId]);</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>// Save / Add Task to Firestore</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const handleSaveTask = async (taskData) =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>if (!user) return;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>const { db, appId, collection, doc, setDoc, addDoc } = window.FirebaseServices;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>try {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>if (editingTask) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>const taskDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', editingTask.id);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>await setDoc(taskDocRef, { ...editingTask, ...taskData, boardId }, { merge: true });</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>} else {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>const tasksCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'tasks');</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>await addDoc(tasksCollectionRef, {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>...taskData,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>boardId,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>evidenceFiles: [],</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>createdAt: new Date().toISOString().split('T')[0]</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>} catch (e) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>console.error("Error saving task:", e);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>setIsModalOpen(false);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>setEditingTask(null);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>};</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>// Delete Task from Firestore</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const confirmDeleteTask = async () =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>if (!user || !taskToDelete) return;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>const { db, appId, doc, deleteDoc } = window.FirebaseServices;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>try {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>const taskDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', taskToDelete.id);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>await deleteDoc(taskDocRef);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>} catch (e) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>console.error("Error deleting task:", e);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>setTaskToDelete(null);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>};</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>// Handle Stage Move</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const handleMoveStage = async (taskId, newStatus) =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>if (!user) return;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>const { db, appId, doc, updateDoc } = window.FirebaseServices;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>try {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>const taskDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', taskId);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>await updateDoc(taskDocRef, { status: newStatus });</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>} catch (e) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>console.error("Error moving stage:", e);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>};</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>// Handle Proof Submission with Cloud Upload</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const handleSubmitEvidence = async (taskId, submissionData) =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>if (!user) return;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>const { db, storage, appId, doc, updateDoc, ref, uploadBytes, getDownloadURL } = window.FirebaseServices;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>try {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>const uploadedFileUrls = [];</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>if (submissionData.newFiles &amp;&amp; submissionData.newFiles.length &gt; 0) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>for (const fileObj of submissionData.newFiles) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>if (fileObj.rawFile) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>const storageRef = ref(storage, `evidence/${appId}/${Date.now()}_${fileObj.rawFile.name}`);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>await uploadBytes(storageRef, fileObj.rawFile);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>const downloadUrl = await getDownloadURL(storageRef);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>uploadedFileUrls.push({</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>id: `file-${Date.now()}`,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>name: fileObj.rawFile.name,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>type: fileObj.rawFile.type,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>dataUrl: downloadUrl</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>});</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>} else if (fileObj.dataUrl) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>uploadedFileUrls.push(fileObj);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>const targetTask = tasks.find(t =&gt; t.id === taskId);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>const existingFiles = targetTask?.evidenceFiles || [];</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>const taskDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', taskId);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>await updateDoc(taskDocRef, {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>status: submissionData.markCompletedImmediately ? 'completed' : 'in_review',</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>evidenceUrl: submissionData.evidenceUrl || targetTask?.evidenceUrl || '',</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>evidenceFiles: [...existingFiles, ...uploadedFileUrls],</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>submitterNotes: submissionData.submitterNotes,</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>submittedAt: new Date().toLocaleString(),</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>submittedBy: submissionData.submittedBy || 'Team Member'</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>});</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>} catch (e) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>console.error("Error submitting evidence:", e);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>setSubmittingTask(null);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>};</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const handleApproveReject = async (taskId, newStatus) =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>if (!user) return;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>const { db, appId, doc, updateDoc } = window.FirebaseServices;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>try {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>const taskDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', taskId);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>await updateDoc(taskDocRef, { status: newStatus });</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>} catch (e) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>console.error("Error updating status:", e);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>setReviewingTask(null);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>};</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const filteredTasks = useMemo(() =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>return tasks.filter(task =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>if (activeTab === 'recurring' &amp;&amp; !task.isRecurring) return false;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>if (activeTab === 'recurring' &amp;&amp; recurringFrequency !== 'all' &amp;&amp; task.frequency !== recurringFrequency) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>return false;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>const matchesSearch =<span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>(task.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>(task.description || '').toLowerCase().includes(searchQuery.toLowerCase()) ||</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>(task.assignee || '').toLowerCase().includes(searchQuery.toLowerCase());</span></p>
+<p class="p6"><span class="s1"><span class="Apple-converted-space">          </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>const matchesStatus = selectedStatus === 'all' || task.status === selectedStatus;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>const matchesPriority = selectedPriority === 'all' || task.priority === selectedPriority;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>const matchesAssignee = selectedAssignee === 'all' || task.assignee === selectedAssignee;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>return matchesSearch &amp;&amp; matchesStatus &amp;&amp; matchesPriority &amp;&amp; matchesAssignee;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>}, [tasks, activeTab, recurringFrequency, searchQuery, selectedStatus, selectedPriority, selectedAssignee]);</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>return (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div className="min-h-screen flex flex-col font-sans pb-12"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>{/* Header Bar */}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>&lt;header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="flex items-center space-x-3"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div className="bg-indigo-600 text-white p-2 rounded-xl shadow-md"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;i data-lucide="layers" className="w-5 h-5"&gt;&lt;/i&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight flex items-center space-x-2"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;span&gt;Collaborative Workflows&lt;/span&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;span className="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase border border-emerald-200"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>Live Sync</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/span&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;/h1&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;p className="text-xs text-slate-500 font-medium"&gt;Shared Real-Time Task &amp; Deliverable Tracker&lt;/p&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>{/* Room / Board Switcher */}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="flex items-center space-x-2"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div className="hidden md:flex items-center space-x-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;span className="text-xs font-bold text-slate-500 pl-2"&gt;Board Code:&lt;/span&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;input</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>type="text"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>value={boardInput || boardId}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>onChange={(e) =&gt; setBoardInput(e.target.value)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>placeholder="Enter Board ID"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>className="text-xs font-bold bg-white px-2 py-1 rounded-lg border border-slate-200 text-slate-800 focus:outline-none w-32"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>/&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;button</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>onClick={() =&gt; boardInput &amp;&amp; setBoardId(boardInput.trim())}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-2.5 py-1 rounded-lg transition-colors"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>Join</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;button</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>onClick={() =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>setEditingTask(null);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>setIsModalOpen(true);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>}}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>className="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 shadow-xs cursor-pointer transition-all"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;i data-lucide="plus" className="w-4 h-4"&gt;&lt;/i&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;span&gt;Create Shared Task&lt;/span&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/header&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>{/* Main Area */}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>&lt;main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full flex flex-col space-y-6"&gt;</span></p>
+<p class="p6"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{/* View &amp; Tab Switcher */}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="flex space-x-4"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;button</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>onClick={() =&gt; setActiveTab('main')}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>className={`text-sm font-bold pb-1 border-b-2 transition-all cursor-pointer ${</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>activeTab === 'main' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500'</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>}`}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>All Shared Tasks ({tasks.length})</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;button</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>onClick={() =&gt; setActiveTab('recurring')}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>className={`text-sm font-bold pb-1 border-b-2 transition-all cursor-pointer ${</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>activeTab === 'recurring' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500'</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>}`}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>Recurring (Daily / Weekly / Monthly)</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>{activeTab === 'main' &amp;&amp; (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div className="flex items-center space-x-2 bg-slate-200/60 p-1 rounded-lg self-start sm:self-auto"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;button</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>onClick={() =&gt; setViewMode('kanban')}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>className={`px-3 py-1 rounded-md text-xs font-bold ${</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>viewMode === 'kanban' ? 'bg-white text-indigo-600 shadow-xs' : 'text-slate-600'</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>}`}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>Kanban Board</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;button</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>onClick={() =&gt; setViewMode('list')}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>className={`px-3 py-1 rounded-md text-xs font-bold ${</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>viewMode === 'list' ? 'bg-white text-indigo-600 shadow-xs' : 'text-slate-600'</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>}`}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>Table List</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{/* Filter Controls */}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs flex flex-wrap items-center justify-between gap-3"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;input</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>type="text"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>placeholder="Search tasks, proof links, names..."</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>value={searchQuery}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onChange={(e) =&gt; setSearchQuery(e.target.value)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>className="text-xs px-3 py-1.5 border border-slate-200 rounded-lg focus:outline-none w-full sm:w-64"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>/&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="flex flex-wrap items-center gap-2"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;select</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>value={selectedStatus}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>onChange={(e) =&gt; setSelectedStatus(e.target.value)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>className="text-xs border border-slate-200 bg-white rounded-lg px-2.5 py-1.5 text-slate-700 font-medium"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;option value="all"&gt;All Stages&lt;/option&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>{STAGES.map(s =&gt; &lt;option key={s.id} value={s.id}&gt;{s.name}&lt;/option&gt;)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/select&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;select</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>value={selectedPriority}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>onChange={(e) =&gt; setSelectedPriority(e.target.value)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>className="text-xs border border-slate-200 bg-white rounded-lg px-2.5 py-1.5 text-slate-700 font-medium"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;option value="all"&gt;All Priorities&lt;/option&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>{Object.keys(PRIORITIES).map(p =&gt; &lt;option key={p} value={p}&gt;{PRIORITIES[p].label}&lt;/option&gt;)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/select&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{/* Main Task View Rendering */}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{loading ? (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="text-center py-16 text-slate-500 font-medium"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>Syncing shared board with cloud...</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>) : filteredTasks.length === 0 ? (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="bg-white rounded-2xl p-12 text-center border border-slate-200"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;p className="text-slate-600 font-bold text-sm"&gt;No tasks found on this board.&lt;/p&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;p className="text-slate-400 text-xs mt-1"&gt;Click "Create Shared Task" to add work for your team.&lt;/p&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>) : viewMode === 'kanban' ? (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;KanbanView</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>tasks={filteredTasks}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>stages={STAGES}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onMoveStage={handleMoveStage}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onOpenSubmitModal={setSubmittingTask}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onOpenReviewModal={setReviewingTask}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onEditTask={(task) =&gt; { setEditingTask(task); setIsModalOpen(true); }}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onDeleteTask={setTaskToDelete}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>/&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>) : (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;TableView</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>tasks={filteredTasks}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>stages={STAGES}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onMoveStage={handleMoveStage}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onOpenSubmitModal={setSubmittingTask}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onOpenReviewModal={setReviewingTask}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onEditTask={(task) =&gt; { setEditingTask(task); setIsModalOpen(true); }}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onDeleteTask={setTaskToDelete}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>/&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/main&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>{/* Modal Components */}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>{isModalOpen &amp;&amp; (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;TaskModal</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>task={editingTask}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>stages={STAGES}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>onClose={() =&gt; { setIsModalOpen(false); setEditingTask(null); }}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>onSave={handleSaveTask}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>/&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>)}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>{submittingTask &amp;&amp; (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;SubmitProofModal</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>task={submittingTask}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>onClose={() =&gt; setSubmittingTask(null)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>onSubmit={(data) =&gt; handleSubmitEvidence(submittingTask.id, data)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>/&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>)}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>{reviewingTask &amp;&amp; (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;ReviewProofModal</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>task={reviewingTask}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>onClose={() =&gt; setReviewingTask(null)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>onApprove={() =&gt; handleApproveReject(reviewingTask.id, 'completed')}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>onReject={() =&gt; handleApproveReject(reviewingTask.id, 'in_progress')}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>/&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>)}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>{taskToDelete &amp;&amp; (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;DeleteModal</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>taskTitle={taskToDelete.title}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>onConfirm={confirmDeleteTask}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>onCancel={() =&gt; setTaskToDelete(null)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>/&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>function KanbanView({ tasks, stages, onMoveStage, onOpenSubmitModal, onOpenReviewModal, onEditTask, onDeleteTask }) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>return (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>{stages.map(stage =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>const stageTasks = tasks.filter(t =&gt; t.status === stage.id);</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>return (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div key={stage.id} className="bg-slate-200/60 rounded-2xl p-3 border border-slate-200 flex flex-col min-h-[400px]"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div className="flex items-center justify-between pb-3 px-1 border-b border-slate-300/60 mb-3"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;h3 className="font-extrabold text-slate-800 text-xs uppercase tracking-wider"&gt;{stage.name}&lt;/h3&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;span className="text-xs font-bold px-2 py-0.5 rounded-full bg-white text-slate-700 shadow-2xs"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>{stageTasks.length}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;/span&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div className="space-y-3 flex-1"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>{stageTasks.map(task =&gt; (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div key={task.id} className="bg-white rounded-xl p-3.5 border border-slate-200 shadow-2xs hover:shadow-md transition-all"&gt;</span></p>
+<p class="p6"><span class="s1"><span class="Apple-converted-space">                      </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>{/* High-Visibility Edit / Delete Bar */}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${PRIORITIES[task.priority]?.color || 'bg-slate-100'}`}&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>{PRIORITIES[task.priority]?.label || 'Medium'}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/span&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;div className="flex items-center space-x-1"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>&lt;button</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span>onClick={() =&gt; onEditTask(task)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span>className="px-2 py-1 bg-indigo-50 border border-indigo-200 text-indigo-700 hover:bg-indigo-100 rounded text-xs font-bold cursor-pointer"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span>Edit</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>&lt;button</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span>onClick={() =&gt; onDeleteTask(task)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span>className="px-2 py-1 bg-rose-50 border border-rose-200 text-rose-700 hover:bg-rose-100 rounded text-xs font-bold cursor-pointer"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span>Delete</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;h4 className="font-bold text-xs text-slate-900 mb-1"&gt;{task.title}&lt;/h4&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>{task.description &amp;&amp; &lt;p className="text-[11px] text-slate-500 mb-2 line-clamp-2"&gt;{task.description}&lt;/p&gt;}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>{/* Move Stage Selector */}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;div className="my-2"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;select</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>value={task.status}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>onChange={(e) =&gt; onMoveStage(task.id, e.target.value)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>className="w-full text-[11px] font-semibold bg-slate-50 border border-slate-200 rounded-md px-2 py-1 text-slate-700 cursor-pointer"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>{stages.map(s =&gt; &lt;option key={s.id} value={s.id}&gt;Stage: {s.name}&lt;/option&gt;)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/select&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>{/* Evidence / Proof Submission Bar */}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>{task.evidenceUrl || (task.evidenceFiles &amp;&amp; task.evidenceFiles.length &gt; 0) ? (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>&lt;button</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span>onClick={() =&gt; onOpenReviewModal(task)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span>className="text-[10px] font-bold bg-indigo-50 border border-indigo-200 text-indigo-700 px-2 py-1 rounded"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span>Proof Attached</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>) : (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>&lt;span className="text-[10px] text-amber-600 font-semibold"&gt;No proof yet&lt;/span&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>)}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;button</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>onClick={() =&gt; onOpenSubmitModal(task)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>className="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-2xs"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>Submit Proof</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>{/* Footer */}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;span className="font-semibold text-slate-700"&gt;Assigned: {task.assignee || 'Anyone'}&lt;/span&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>{task.dueDate &amp;&amp; &lt;span&gt;Due: {task.dueDate}&lt;/span&gt;}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>))}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>})}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>function TableView({ tasks, stages, onMoveStage, onOpenSubmitModal, onOpenReviewModal, onEditTask, onDeleteTask }) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>return (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>&lt;table className="w-full text-left text-xs"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;tr&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;th className="p-3.5"&gt;Task Name&lt;/th&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;th className="p-3.5"&gt;Stage&lt;/th&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;th className="p-3.5"&gt;Proof / Deliverable&lt;/th&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;th className="p-3.5"&gt;Name&lt;/th&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;th className="p-3.5 text-center"&gt;Actions&lt;/th&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/tr&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/thead&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;tbody className="divide-y divide-slate-100"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>{tasks.map(task =&gt; (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;tr key={task.id} className="hover:bg-slate-50"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;td className="p-3.5 font-bold text-slate-900"&gt;{task.title}&lt;/td&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;td className="p-3.5"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;select</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>value={task.status}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>onChange={(e) =&gt; onMoveStage(task.id, e.target.value)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>className="text-xs border border-slate-200 rounded px-2 py-1 font-semibold"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>{stages.map(s =&gt; &lt;option key={s.id} value={s.id}&gt;{s.name}&lt;/option&gt;)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/select&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;/td&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;td className="p-3.5"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div className="flex items-center space-x-2"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;button</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>onClick={() =&gt; onOpenSubmitModal(task)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded text-[11px]"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>Submit Proof</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>{(task.evidenceUrl || task.evidenceFiles?.length &gt; 0) &amp;&amp; (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;button</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>onClick={() =&gt; onOpenReviewModal(task)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>className="bg-indigo-50 border border-indigo-200 text-indigo-700 font-bold px-2 py-1 rounded text-[11px]"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                          </span>View Proof</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;/td&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;td className="p-3.5 font-medium text-slate-700"&gt;{task.assignee || 'Unassigned'}&lt;/td&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;td className="p-3.5 text-center"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;div className="flex items-center justify-center space-x-1.5"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;button</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>onClick={() =&gt; onEditTask(task)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>className="bg-indigo-50 border border-indigo-200 text-indigo-700 px-2.5 py-1 rounded font-bold"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>Edit</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;button</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>onClick={() =&gt; onDeleteTask(task)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>className="bg-rose-50 border border-rose-200 text-rose-700 px-2.5 py-1 rounded font-bold"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>Delete</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;/td&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/tr&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>))}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/tbody&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/table&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>function TaskModal({ task, stages, onClose, onSave }) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [title, setTitle] = useState(task?.title || '');</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [description, setDescription] = useState(task?.description || '');</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [status, setStatus] = useState(task?.status || 'backlog');</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [priority, setPriority] = useState(task?.priority || 'medium');</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [assignee, setAssignee] = useState(task?.assignee || '');</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [dueDate, setDueDate] = useState(task?.dueDate || '');</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [isRecurring, setIsRecurring] = useState(task?.isRecurring || false);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [frequency, setFrequency] = useState(task?.frequency || 'daily');</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>return (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full p-6 space-y-4 text-xs"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;h3 className="font-bold text-base text-slate-900"&gt;{task ? 'Edit Task' : 'Create Task'}&lt;/h3&gt;</span></p>
+<p class="p6"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;label className="font-semibold block mb-1"&gt;Task Title *&lt;/label&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;input</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>type="text"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>required</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>value={title}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onChange={(e) =&gt; setTitle(e.target.value)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none font-medium text-xs"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>/&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;label className="font-semibold block mb-1"&gt;Description&lt;/label&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;textarea</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>rows={3}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>value={description}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onChange={(e) =&gt; setDescription(e.target.value)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none font-medium text-xs"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>/&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="grid grid-cols-2 gap-3"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;label className="font-semibold block mb-1"&gt;Assigned Name&lt;/label&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;input</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>type="text"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>value={assignee}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>onChange={(e) =&gt; setAssignee(e.target.value)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none text-xs"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>/&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;label className="font-semibold block mb-1"&gt;Due Date&lt;/label&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;input</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>type="date"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>value={dueDate}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>onChange={(e) =&gt; setDueDate(e.target.value)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none text-xs"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>/&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="flex justify-end space-x-2 pt-4 border-t border-slate-100"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;button onClick={onClose} className="px-4 py-2 border border-slate-200 rounded-lg font-semibold text-slate-600"&gt;Cancel&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;button<span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onClick={() =&gt; title &amp;&amp; onSave({ title, description, status, priority, assignee, dueDate, isRecurring, frequency })}<span class="Apple-converted-space"> </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>Save Task</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>function SubmitProofModal({ task, onClose, onSubmit }) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [submitterName, setSubmitterName] = useState(task.assignee || '');</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [evidenceUrl, setEvidenceUrl] = useState(task.evidenceUrl || '');</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [submitterNotes, setSubmitterNotes] = useState(task.submitterNotes || '');</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const [files, setFiles] = useState([]);</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>const handleFileChange = (e) =&gt; {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>const selected = Array.from(e.target.files);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>setFiles(selected.map(file =&gt; ({ rawFile: file, name: file.name })));</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>};</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>return (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full p-6 space-y-4 text-xs"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;h3 className="font-bold text-base text-slate-900"&gt;Submit Work Proof&lt;/h3&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;p className="text-slate-500 font-medium"&gt;Task: {task.title}&lt;/p&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;label className="font-semibold block mb-1"&gt;Your Name *&lt;/label&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;input</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>type="text"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>required</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>value={submitterName}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onChange={(e) =&gt; setSubmitterName(e.target.value)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>/&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;label className="font-semibold block mb-1"&gt;Link to Work / Post / Document&lt;/label&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;input</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>type="url"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>placeholder="https://..."</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>value={evidenceUrl}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onChange={(e) =&gt; setEvidenceUrl(e.target.value)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>/&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;label className="font-semibold block mb-1"&gt;Upload Photo or Video Evidence&lt;/label&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;input</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>type="file"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>multiple</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>accept="image/*,video/*"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onChange={handleFileChange}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>className="w-full text-xs text-slate-500 border border-slate-200 rounded-lg p-2"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>/&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="flex justify-end space-x-2 pt-4 border-t border-slate-100"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;button onClick={onClose} className="px-4 py-2 border border-slate-200 rounded-lg font-semibold"&gt;Cancel&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;button</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>onClick={() =&gt; onSubmit({ submittedBy: submitterName, evidenceUrl, submitterNotes, newFiles: files })}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>className="px-5 py-2 bg-emerald-600 text-white font-bold rounded-lg"</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>Upload &amp; Submit</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>function ReviewProofModal({ task, onClose, onApprove, onReject }) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>return (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-xl w-full p-6 space-y-4 text-xs"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;h3 className="font-bold text-base text-slate-900"&gt;Inspect Submitted Work Proof&lt;/h3&gt;</span></p>
+<p class="p6"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="bg-slate-50 p-3 rounded-xl border border-slate-200"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;p className="font-bold text-slate-800"&gt;Submitted by: {task.submittedBy || 'Team Member'}&lt;/p&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;p className="text-slate-500 mt-0.5"&gt;{task.submittedAt || 'Recently'}&lt;/p&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{task.evidenceUrl &amp;&amp; (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;span className="font-semibold block mb-1"&gt;Submitted External Link:&lt;/span&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;a href={task.evidenceUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-600 font-bold underline"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>{task.evidenceUrl}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/a&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>)}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>{task.evidenceFiles?.length &gt; 0 &amp;&amp; (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>{task.evidenceFiles.map(f =&gt; (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;div key={f.id} className="border rounded-lg overflow-hidden h-24 bg-slate-900"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>{f.type?.startsWith('image/') ? (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;img src={f.dataUrl} alt="Proof" className="w-full h-full object-cover" /&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>) : (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;video src={f.dataUrl} controls className="w-full h-full object-cover" /&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>)}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>))}</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>)}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="flex justify-between items-center pt-4 border-t border-slate-100"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;button onClick={onReject} className="px-4 py-2 bg-rose-50 text-rose-700 border border-rose-200 font-bold rounded-lg"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>Reject</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;button onClick={onApprove} className="px-5 py-2 bg-emerald-600 text-white font-bold rounded-lg"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>Approve &amp; Complete</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>function DeleteModal({ taskTitle, onConfirm, onCancel }) {</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>return (</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div className="fixed inset-0 z-60 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div className="bg-white rounded-2xl border border-slate-200 p-6 max-w-md w-full text-center space-y-4"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;h3 className="font-bold text-base text-slate-900"&gt;Delete Task?&lt;/h3&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;p className="text-xs text-slate-500"&gt;Are you sure you want to delete "{taskTitle}" from the shared board?&lt;/p&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="flex justify-center space-x-2"&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;button onClick={onCancel} className="px-4 py-2 border rounded-lg text-xs font-semibold"&gt;Cancel&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">              </span>&lt;button onClick={onConfirm} className="px-5 py-2 bg-rose-600 text-white font-bold rounded-lg text-xs"&gt;Delete&lt;/button&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">      </span>);</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p6"><span class="s7"></span><br></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>// Mount React App</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>const root = ReactDOM.createRoot(document.getElementById('root'));</span></p>
+<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span>root.render(&lt;App /&gt;);</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s3">&lt;/</span><span class="s1">script</span><span class="s3">&gt;</span></p>
+<p class="p2"><span class="s3">&lt;/</span><span class="s1">body</span><span class="s3">&gt;</span></p>
+<p class="p2"><span class="s3">&lt;/</span><span class="s1">html</span><span class="s3">&gt;</span></p>
+</body>
+</html>
