@@ -61,27 +61,28 @@
       getDownloadURL 
     } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
-    // Firebase configuration check
-    const hasRealConfig = typeof __firebase_config !== 'undefined' && __firebase_config;
-    const firebaseConfig = hasRealConfig 
-      ? JSON.parse(__firebase_config) 
-      : {
-          apiKey: "demo-api-key",
-          authDomain: "demo-project.firebaseapp.com",
-          projectId: "demo-project",
-          storageBucket: "demo-project.appspot.com",
-          messagingSenderId: "123456789",
-          appId: "1:123456789:web:demo"
-        };
+    // Safely check for real platform injected Firebase config
+    const hasRealConfig = typeof __firebase_config !== 'undefined' && __firebase_config && __firebase_config.trim() !== '';
+    let auth = null, db = null, storage = null;
+    let isRealFirebase = false;
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
+    if (hasRealConfig) {
+      try {
+        const configObj = JSON.parse(__firebase_config);
+        const app = initializeApp(configObj);
+        auth = getAuth(app);
+        db = getFirestore(app);
+        storage = getStorage(app);
+        isRealFirebase = true;
+      } catch (err) {
+        console.warn("Firebase initialization failed, falling back to LocalStorage mode:", err);
+      }
+    }
+
     const appId = typeof __app_id !== 'undefined' ? __app_id : 'shared-workflow-app';
 
     window.FirebaseServices = {
-      isRealFirebase: Boolean(hasRealConfig),
+      isRealFirebase,
       auth,
       db,
       storage,
@@ -228,6 +229,16 @@
           <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
           </svg>
+        ),
+        database: (
+          <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8-4m0 5c0 2.21 3.582 4 8 4s8-1.79 8-4" />
+          </svg>
+        ),
+        download: (
+          <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
         )
       };
       return icons[name] || null;
@@ -238,7 +249,11 @@
       const [tasks, setTasks] = useState([]);
       const [loading, setLoading] = useState(true);
       const [toast, setToast] = useState(null);
-      const [isLocalMode, setIsLocalMode] = useState(!window.FirebaseServices.isRealFirebase);
+
+      // Default to LocalStorage mode if real Firebase config is absent (GitHub Pages)
+      const [isLocalMode, setIsLocalMode] = useState(() => {
+        return !window.FirebaseServices?.isRealFirebase;
+      });
 
       const [activeTab, setActiveTab] = useState('main'); // 'main' | 'recurring'
       const [viewMode, setViewMode] = useState('kanban'); // 'kanban' | 'list'
@@ -249,6 +264,7 @@
       const [selectedPriority, setSelectedPriority] = useState('all');
 
       const [isModalOpen, setIsModalOpen] = useState(false);
+      const [isBackupModalOpen, setIsBackupModalOpen] = useState(false);
       const [editingTask, setEditingTask] = useState(null);
       const [submittingTask, setSubmittingTask] = useState(null);
       const [reviewingTask, setReviewingTask] = useState(null);
@@ -269,10 +285,53 @@
         }
       };
 
+      // Export workspace data as a downloadable JSON backup for Google Drive
+      const handleExportJSON = () => {
+        const backupData = {
+          app: 'Collaborative Workflow Tracker',
+          exportedAt: new Date().toISOString(),
+          taskCount: tasks.length,
+          tasks: tasks
+        };
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `workflow_tracker_backup_${new Date().toISOString().split('T')[0]}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+        showToast('Workspace exported! Save this file to your Google Drive.', 'success');
+      };
+
+      // Import workspace data from Google Drive / JSON backup file
+      const handleImportJSON = (jsonString, mode = 'overwrite') => {
+        try {
+          const parsed = JSON.parse(jsonString);
+          const importedTasks = Array.isArray(parsed) ? parsed : (parsed.tasks || []);
+          if (!Array.isArray(importedTasks)) throw new Error('Invalid backup file format');
+
+          let finalTasks;
+          if (mode === 'merge') {
+            const existingIds = new Set(tasks.map(t => t.id));
+            const newItems = importedTasks.filter(t => !existingIds.has(t.id));
+            finalTasks = [...tasks, ...newItems];
+          } else {
+            finalTasks = importedTasks;
+          }
+
+          saveLocalTasks(finalTasks);
+          showToast(`Successfully loaded ${importedTasks.length} tasks from backup!`, 'success');
+          setIsBackupModalOpen(false);
+        } catch (e) {
+          showToast('Failed to parse backup JSON. Please check file format.', 'error');
+        }
+      };
+
+      // Initial Auth and Task Loading
       useEffect(() => {
-        const { auth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, isRealFirebase } = window.FirebaseServices;
-        
-        if (!isRealFirebase) {
+        const services = window.FirebaseServices || {};
+
+        if (!services.isRealFirebase) {
           // Load from LocalStorage for standalone / GitHub Pages hosting
           try {
             const saved = localStorage.getItem('workflow_tracker_tasks');
@@ -288,6 +347,8 @@
           setLoading(false);
           return;
         }
+
+        const { auth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } = services;
 
         const initAuth = async () => {
           try {
@@ -457,7 +518,6 @@
         const targetTask = tasks.find(t => t.id === taskId);
         const existingFiles = targetTask?.evidenceFiles || [];
 
-        // Convert newly attached files to data URLs for local or cloud fallback
         const processLocalFiles = async (newFiles) => {
           if (!newFiles || newFiles.length === 0) return [];
           const items = [];
@@ -606,21 +666,6 @@
         setReviewingTask(null);
       };
 
-      const copyBoardCode = () => {
-        try {
-          const textToCopy = boardId;
-          const textarea = document.createElement('textarea');
-          textarea.value = textToCopy;
-          document.body.appendChild(textarea);
-          textarea.select();
-          document.execCommand('copy');
-          document.body.removeChild(textarea);
-          showToast(`Board code '${boardId}' copied!`, 'success');
-        } catch (e) {
-          showToast(`Board Code: ${boardId}`, 'info');
-        }
-      };
-
       // Filtered Tasks Memo
       const filteredTasks = useMemo(() => {
         return tasks.filter(task => {
@@ -667,7 +712,7 @@
                     <span>Collaborative Workflow Tracker</span>
                     <span className="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase border border-emerald-200 flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                      Live Sync
+                      {isLocalMode ? 'GitHub Local Sync' : 'Live Cloud Sync'}
                     </span>
                   </h1>
                   <p className="text-xs text-slate-500 font-medium hidden sm:block">Shared Real-Time Task & Deliverable Tracker</p>
@@ -676,6 +721,15 @@
 
               {/* Actions Header */}
               <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setIsBackupModalOpen(true)}
+                  className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 border border-slate-200 cursor-pointer transition-all"
+                  title="Google Drive & Cloud Sync Options"
+                >
+                  <Icon name="database" className="w-4 h-4 text-indigo-600" />
+                  <span className="hidden sm:inline">Drive & Cloud Sync</span>
+                </button>
+
                 <button
                   onClick={() => {
                     setEditingTask(null);
@@ -690,7 +744,6 @@
             </div>
           </header>
 
-          {}
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full flex flex-col space-y-6">
             
             {/* Quick Metrics Cards */}
@@ -736,7 +789,6 @@
               </div>
             </div>
 
-            {}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
               
               {/* Active Tab Switcher */}
@@ -846,10 +898,10 @@
               </div>
             </div>
 
-            {/* Main Board Container */}
+            {}
             {loading ? (
               <div className="text-center py-20 text-slate-500 font-medium animate-pulse">
-                Syncing workspace tasks with cloud...
+                Syncing workspace tasks...
               </div>
             ) : filteredTasks.length === 0 ? (
               <div className="bg-white rounded-2xl p-12 text-center border border-slate-200 shadow-2xs">
@@ -890,7 +942,16 @@
             />
           )}
 
-          {}
+          {isBackupModalOpen && (
+            <CloudBackupModal
+              tasks={tasks}
+              isLocalMode={isLocalMode}
+              onClose={() => setIsBackupModalOpen(false)}
+              onExport={handleExportJSON}
+              onImport={handleImportJSON}
+            />
+          )}
+
           {submittingTask && (
             <SubmitProofModal
               task={submittingTask}
@@ -899,7 +960,6 @@
             />
           )}
 
-          {}
           {reviewingTask && (
             <ReviewProofModal
               task={reviewingTask}
@@ -909,7 +969,6 @@
             />
           )}
 
-          {}
           {taskToDelete && (
             <DeleteModal
               taskTitle={taskToDelete.title}
@@ -918,7 +977,6 @@
             />
           )}
 
-          {}
           {toast && (
             <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl shadow-xl text-xs font-bold text-white transition-all transform animate-fade-in ${
               toast.type === 'success' ? 'bg-emerald-600' : toast.type === 'error' ? 'bg-rose-600' : 'bg-slate-800'
@@ -938,8 +996,6 @@
 
             return (
               <div key={stage.id} className="bg-slate-200/60 rounded-2xl p-3 border border-slate-200/80 flex flex-col min-h-[440px]">
-                
-                {/* Stage Column Header */}
                 <div className="flex items-center justify-between pb-3 px-1 border-b border-slate-300/60 mb-3">
                   <div className="flex items-center space-x-2">
                     <span className="font-extrabold text-slate-800 text-xs uppercase tracking-wider">{stage.name}</span>
@@ -949,13 +1005,10 @@
                   </span>
                 </div>
 
-                {/* Column Cards Container */}
                 <div className="space-y-3 flex-1">
                   {stageTasks.map(task => (
                     <div key={task.id} className="bg-white rounded-xl p-3.5 border border-slate-200/90 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between">
-                      
                       <div>
-                        {/* Top Metadata Header */}
                         <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
                           <div className="flex items-center space-x-1.5">
                             <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md border ${PRIORITIES[task.priority]?.color || 'bg-slate-100'}`}>
@@ -969,7 +1022,6 @@
                             )}
                           </div>
 
-                          {/* Quick Edit & Delete Actions */}
                           <div className="flex items-center space-x-1">
                             <button
                               onClick={() => onEditTask(task)}
@@ -988,7 +1040,6 @@
                           </div>
                         </div>
 
-                        {/* Title & Description */}
                         <h4 className="font-bold text-xs text-slate-900 mb-1 leading-snug">{task.title}</h4>
                         {task.description && (
                           <p className="text-[11px] text-slate-500 mb-2.5 line-clamp-2 leading-relaxed">{task.description}</p>
@@ -996,7 +1047,6 @@
                       </div>
 
                       <div>
-                        {/* Move Stage Quick Dropdown */}
                         <div className="my-2">
                           <select
                             value={task.status}
@@ -1007,7 +1057,6 @@
                           </select>
                         </div>
 
-                        {/* Deliverable Proof Bar */}
                         <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between">
                           {task.evidenceUrl || (task.evidenceFiles && task.evidenceFiles.length > 0) ? (
                             <button
@@ -1030,7 +1079,6 @@
                           </button>
                         </div>
 
-                        {/* Footer info */}
                         <div className="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
                           <span className="font-semibold text-slate-700 flex items-center space-x-1">
                             <Icon name="user" className="w-3 h-3 text-slate-400" />
@@ -1148,13 +1196,28 @@
       const [isRecurring, setIsRecurring] = useState(task?.isRecurring || false);
       const [frequency, setFrequency] = useState(task?.frequency || 'daily');
 
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!title.trim()) return;
+        onSave({ 
+          title: title.trim(), 
+          description, 
+          status, 
+          priority, 
+          assignee, 
+          dueDate, 
+          isRecurring, 
+          frequency 
+        });
+      };
+
       return (
         <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full p-6 space-y-4 text-xs animate-fade-in">
+          <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full p-6 space-y-4 text-xs animate-fade-in">
             
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="font-bold text-base text-slate-900">{task ? 'Edit Shared Task' : 'Create New Shared Task'}</h3>
-              <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600 rounded-lg cursor-pointer">
+              <button type="button" onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600 rounded-lg cursor-pointer">
                 <Icon name="x" className="w-5 h-5" />
               </button>
             </div>
@@ -1228,7 +1291,6 @@
               </div>
             </div>
 
-            {/* Recurring Task Option */}
             <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
               <label className="flex items-center space-x-2 cursor-pointer">
                 <input
@@ -1258,20 +1320,21 @@
 
             <div className="flex justify-end space-x-2 pt-4 border-t border-slate-100">
               <button 
+                type="button"
                 onClick={onClose} 
                 className="px-4 py-2 border border-slate-200 rounded-xl font-semibold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button 
-                onClick={() => title.trim() && onSave({ title, description, status, priority, assignee, dueDate, isRecurring, frequency })} 
+                type="submit"
                 className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold transition-all shadow-xs cursor-pointer"
               >
                 Save Task
               </button>
             </div>
 
-          </div>
+          </form>
         </div>
       );
     }
@@ -1295,16 +1358,21 @@
         setFiles(prev => [...prev, ...processed]);
       };
 
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        onSubmit({ submittedBy: submitterName, evidenceUrl, submitterNotes, newFiles: files });
+      };
+
       return (
         <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full p-6 space-y-4 text-xs animate-fade-in">
+          <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full p-6 space-y-4 text-xs animate-fade-in">
             
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
                 <h3 className="font-bold text-base text-slate-900">Submit Deliverable Proof</h3>
                 <p className="text-slate-500 text-[11px] font-medium mt-0.5">Task: {task.title}</p>
               </div>
-              <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600 rounded-lg cursor-pointer">
+              <button type="button" onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600 rounded-lg cursor-pointer">
                 <Icon name="x" className="w-5 h-5" />
               </button>
             </div>
@@ -1366,13 +1434,14 @@
 
             <div className="flex justify-end space-x-2 pt-4 border-t border-slate-100">
               <button 
+                type="button"
                 onClick={onClose} 
                 className="px-4 py-2 border border-slate-200 rounded-xl font-semibold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
-                onClick={() => onSubmit({ submittedBy: submitterName, evidenceUrl, submitterNotes, newFiles: files })}
+                type="submit"
                 className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all shadow-xs cursor-pointer flex items-center space-x-1.5"
               >
                 <Icon name="uploadCloud" className="w-4 h-4" />
@@ -1380,7 +1449,7 @@
               </button>
             </div>
 
-          </div>
+          </form>
         </div>
       );
     }
@@ -1402,7 +1471,6 @@
               </button>
             </div>
 
-            {/* Submitter Box */}
             <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-between">
               <div>
                 <div className="font-bold text-slate-800">Submitted by: {task.submittedBy || 'Team Member'}</div>
@@ -1435,7 +1503,6 @@
               </div>
             )}
 
-            {/* Attached Media Files */}
             {task.evidenceFiles && task.evidenceFiles.length > 0 && (
               <div>
                 <span className="font-bold text-slate-700 block mb-1.5">Attached Files ({task.evidenceFiles.length}):</span>
@@ -1456,7 +1523,6 @@
               </div>
             )}
 
-            {/* Feedback Input */}
             <div>
               <label className="font-semibold text-slate-700 block mb-1">Review Feedback / Revision Notes</label>
               <textarea
@@ -1509,6 +1575,144 @@
                 Delete
               </button>
             </div>
+          </div>
+        </div>
+      );
+    }
+
+    function CloudBackupModal({ tasks, isLocalMode, onClose, onExport, onImport }) {
+      const [importText, setImportText] = useState('');
+      const [importMode, setImportMode] = useState('overwrite'); // 'overwrite' | 'merge'
+
+      const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          onImport(event.target.result, importMode);
+        };
+        reader.readAsText(file);
+      };
+
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full p-6 space-y-5 text-xs animate-fade-in">
+            
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center space-x-2">
+                <div className="p-2 bg-indigo-50 text-indigo-600 rounded-xl">
+                  <Icon name="database" className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-base text-slate-900">Google Drive & Cloud Backup</h3>
+                  <p className="text-[11px] text-slate-500 font-medium">Save and restore workspace tasks across devices</p>
+                </div>
+              </div>
+              <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600 rounded-lg cursor-pointer">
+                <Icon name="x" className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-bold uppercase text-slate-400 block">Current Persistence Mode</span>
+                <span className="font-bold text-slate-800 text-xs">
+                  {isLocalMode ? 'Browser LocalStorage (GitHub Pages Mode)' : 'Live Firebase Realtime Sync'}
+                </span>
+              </div>
+              <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold border border-emerald-200">
+                {tasks.length} Saved Tasks
+              </span>
+            </div>
+
+            <div className="p-4 bg-indigo-50/50 border border-indigo-100 rounded-xl space-y-2">
+              <h4 className="font-bold text-slate-800 flex items-center space-x-1.5">
+                <Icon name="download" className="w-4 h-4 text-indigo-600" />
+                <span>1. Export Backup for Google Drive</span>
+              </h4>
+              <p className="text-slate-600 leading-relaxed">
+                Download a complete <code className="bg-indigo-100/70 px-1 py-0.5 rounded text-indigo-800 font-mono text-[10px]">.json</code> snapshot of all tasks, attached proofs, and team notes. Upload this file directly to your <strong>Google Drive</strong> folder to back up your work.
+              </p>
+              <button
+                onClick={onExport}
+                className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-xl transition-all shadow-xs cursor-pointer flex items-center space-x-2"
+              >
+                <Icon name="download" className="w-4 h-4" />
+                <span>Download Google Drive Backup (.json)</span>
+              </button>
+            </div>
+
+            <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
+              <h4 className="font-bold text-slate-800 flex items-center space-x-1.5">
+                <Icon name="uploadCloud" className="w-4 h-4 text-emerald-600" />
+                <span>2. Restore / Import Backup from Google Drive</span>
+              </h4>
+
+              <div className="flex items-center space-x-4 text-slate-700 font-medium">
+                <label className="flex items-center space-x-1.5 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="importMode"
+                    value="overwrite"
+                    checked={importMode === 'overwrite'}
+                    onChange={() => setImportMode('overwrite')}
+                    className="text-indigo-600"
+                  />
+                  <span>Replace current board</span>
+                </label>
+                <label className="flex items-center space-x-1.5 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="importMode"
+                    value="merge"
+                    checked={importMode === 'merge'}
+                    onChange={() => setImportMode('merge')}
+                    className="text-indigo-600"
+                  />
+                  <span>Merge with current board</span>
+                </label>
+              </div>
+
+              <div>
+                <label className="font-semibold text-slate-700 block mb-1">Select Backup File from Computer / Google Drive Download:</label>
+                <input
+                  type="file"
+                  accept=".json,application/json"
+                  onChange={handleFileUpload}
+                  className="w-full text-xs text-slate-500 border border-slate-200 rounded-xl p-2 bg-white"
+                />
+              </div>
+
+              <div className="pt-2 border-t border-slate-200">
+                <label className="font-semibold text-slate-700 block mb-1">Or Paste JSON Data directly:</label>
+                <textarea
+                  rows={2}
+                  placeholder="Paste JSON string here..."
+                  value={importText}
+                  onChange={(e) => setImportText(e.target.value)}
+                  className="w-full px-3 py-1.5 border border-slate-200 bg-white rounded-xl focus:outline-none font-mono text-[10px]"
+                />
+                {importText.trim() && (
+                  <button
+                    onClick={() => onImport(importText, importMode)}
+                    className="mt-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl cursor-pointer"
+                  >
+                    Load Pasted Backup
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-2">
+              <button 
+                onClick={onClose} 
+                className="px-4 py-2 border border-slate-200 rounded-xl font-bold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+
           </div>
         </div>
       );
