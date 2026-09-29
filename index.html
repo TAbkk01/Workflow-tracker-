@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Real-Time Collaborative Workflow Tracker</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React & ReactDOM -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  
+  <!-- Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Lucide Icons (Vanilla JS build) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen">
+  <div id="root"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { 
+      getAuth, 
+      signInAnonymously, 
+      signInWithCustomToken, 
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { 
+      getFirestore, 
+      collection, 
+      doc, 
+      setDoc, 
+      addDoc, 
+      updateDoc, 
+      deleteDoc, 
+      onSnapshot 
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { 
+      getStorage, 
+      ref, 
+      uploadBytes, 
+      getDownloadURL 
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+
+    // Firebase configuration fallback
+    const firebaseConfig = typeof __firebase_config !== 'undefined' 
+      ? JSON.parse(__firebase_config) 
+      : {
+          apiKey: "demo-api-key",
+          authDomain: "demo-project.firebaseapp.com",
+          projectId: "demo-project",
+          storageBucket: "demo-project.appspot.com",
+          messagingSenderId: "123456789",
+          appId: "1:123456789:web:demo"
+        };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'shared-workflow-app';
+
+    window.FirebaseServices = {
+      auth,
+      db,
+      storage,
+      appId,
+      signInAnonymously,
+      signInWithCustomToken,
+      onAuthStateChanged,
+      collection,
+      doc,
+      setDoc,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      onSnapshot,
+      ref,
+      uploadBytes,
+      getDownloadURL
+    };
+  </script>
+
+  <script type="text/babel">
+    const { useState, useEffect, useMemo, useRef } = React;
+
+    const STAGES = [
+      { id: 'backlog', name: 'Backlog', badge: 'bg-slate-200 text-slate-800' },
+      { id: 'in_progress', name: 'In Progress', badge: 'bg-blue-100 text-blue-800' },
+      { id: 'in_review', name: 'In Review', badge: 'bg-amber-100 text-amber-800' },
+      { id: 'completed', name: 'Approved & Completed', badge: 'bg-emerald-100 text-emerald-800' }
+    ];
+
+    const PRIORITIES = {
+      low: { label: 'Low', color: 'bg-slate-100 text-slate-700 border-slate-200', order: 1 },
+      medium: { label: 'Medium', color: 'bg-blue-100 text-blue-700 border-blue-200', order: 2 },
+      high: { label: 'High', color: 'bg-amber-100 text-amber-700 border-amber-200', order: 3 },
+      urgent: { label: 'Urgent', color: 'bg-rose-100 text-rose-700 border-rose-200', order: 4 }
+    };
+
+    const FREQUENCIES = {
+      daily: { label: 'Daily', badge: 'bg-indigo-100 text-indigo-700 border-indigo-200' },
+      weekly: { label: 'Weekly', badge: 'bg-purple-100 text-purple-700 border-purple-200' },
+      monthly: { label: 'Monthly', badge: 'bg-teal-100 text-teal-700 border-teal-200' }
+    };
+
+    function App() {
+      const [user, setUser] = useState(null);
+      const [boardId, setBoardId] = useState('main-team-board');
+      const [boardInput, setBoardInput] = useState('');
+      const [tasks, setTasks] = useState([]);
+      const [loading, setLoading] = useState(true);
+
+      const [activeTab, setActiveTab] = useState('main'); 
+      const [viewMode, setViewMode] = useState('kanban'); 
+      const [recurringFrequency, setRecurringFrequency] = useState('all');
+
+      const [searchQuery, setSearchQuery] = useState('');
+      const [selectedStatus, setSelectedStatus] = useState('all');
+      const [selectedPriority, setSelectedPriority] = useState('all');
+      const [selectedAssignee, setSelectedAssignee] = useState('all');
+
+      const [isModalOpen, setIsModalOpen] = useState(false);
+      const [editingTask, setEditingTask] = useState(null);
+      const [submittingTask, setSubmittingTask] = useState(null);
+      const [reviewingTask, setReviewingTask] = useState(null);
+      const [taskToDelete, setTaskToDelete] = useState(null);
+
+      // Refresh Lucide icon rendering on component updates
+      useEffect(() => {
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      });
+
+      // Authenticate User
+      useEffect(() => {
+        const { auth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } = window.FirebaseServices;
+        
+        const initAuth = async () => {
+          try {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+              await signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+              await signInAnonymously(auth);
+            }
+          } catch (e) {
+            console.error("Auth initialization error:", e);
+          }
+        };
+
+        initAuth();
+
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+          setUser(currentUser);
+        });
+
+        return () => unsubscribe();
+      }, []);
+
+      // Real-time Firestore Sync
+      useEffect(() => {
+        if (!user) return;
+
+        const { db, appId, collection, onSnapshot } = window.FirebaseServices;
+        // Path following Rule 1: /artifacts/{appId}/public/data/tasks
+        const tasksCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'tasks');
+
+        setLoading(true);
+        const unsubscribe = onSnapshot(tasksCollectionRef, (snapshot) => {
+          const loadedTasks = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          })).filter(task => !task.boardId || task.boardId === boardId);
+
+          setTasks(loadedTasks);
+          setLoading(false);
+        }, (error) => {
+          console.error("Real-time listener error:", error);
+          setLoading(false);
+        });
+
+        return () => unsubscribe();
+      }, [user, boardId]);
+
+      // Save / Add Task to Firestore
+      const handleSaveTask = async (taskData) => {
+        if (!user) return;
+        const { db, appId, collection, doc, setDoc, addDoc } = window.FirebaseServices;
+
+        try {
+          if (editingTask) {
+            const taskDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', editingTask.id);
+            await setDoc(taskDocRef, { ...editingTask, ...taskData, boardId }, { merge: true });
+          } else {
+            const tasksCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'tasks');
+            await addDoc(tasksCollectionRef, {
+              ...taskData,
+              boardId,
+              evidenceFiles: [],
+              createdAt: new Date().toISOString().split('T')[0]
+            });
+          }
+        } catch (e) {
+          console.error("Error saving task:", e);
+        }
+
+        setIsModalOpen(false);
+        setEditingTask(null);
+      };
+
+      // Delete Task from Firestore
+      const confirmDeleteTask = async () => {
+        if (!user || !taskToDelete) return;
+        const { db, appId, doc, deleteDoc } = window.FirebaseServices;
+
+        try {
+          const taskDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', taskToDelete.id);
+          await deleteDoc(taskDocRef);
+        } catch (e) {
+          console.error("Error deleting task:", e);
+        }
+
+        setTaskToDelete(null);
+      };
+
+      // Handle Stage Move
+      const handleMoveStage = async (taskId, newStatus) => {
+        if (!user) return;
+        const { db, appId, doc, updateDoc } = window.FirebaseServices;
+
+        try {
+          const taskDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', taskId);
+          await updateDoc(taskDocRef, { status: newStatus });
+        } catch (e) {
+          console.error("Error moving stage:", e);
+        }
+      };
+
+      // Handle Proof Submission with Cloud Upload
+      const handleSubmitEvidence = async (taskId, submissionData) => {
+        if (!user) return;
+        const { db, storage, appId, doc, updateDoc, ref, uploadBytes, getDownloadURL } = window.FirebaseServices;
+
+        try {
+          const uploadedFileUrls = [];
+
+          if (submissionData.newFiles && submissionData.newFiles.length > 0) {
+            for (const fileObj of submissionData.newFiles) {
+              if (fileObj.rawFile) {
+                const storageRef = ref(storage, `evidence/${appId}/${Date.now()}_${fileObj.rawFile.name}`);
+                await uploadBytes(storageRef, fileObj.rawFile);
+                const downloadUrl = await getDownloadURL(storageRef);
+                uploadedFileUrls.push({
+                  id: `file-${Date.now()}`,
+                  name: fileObj.rawFile.name,
+                  type: fileObj.rawFile.type,
+                  dataUrl: downloadUrl
+                });
+              } else if (fileObj.dataUrl) {
+                uploadedFileUrls.push(fileObj);
+              }
+            }
+          }
+
+          const targetTask = tasks.find(t => t.id === taskId);
+          const existingFiles = targetTask?.evidenceFiles || [];
+
+          const taskDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', taskId);
+          await updateDoc(taskDocRef, {
+            status: submissionData.markCompletedImmediately ? 'completed' : 'in_review',
+            evidenceUrl: submissionData.evidenceUrl || targetTask?.evidenceUrl || '',
+            evidenceFiles: [...existingFiles, ...uploadedFileUrls],
+            submitterNotes: submissionData.submitterNotes,
+            submittedAt: new Date().toLocaleString(),
+            submittedBy: submissionData.submittedBy || 'Team Member'
+          });
+        } catch (e) {
+          console.error("Error submitting evidence:", e);
+        }
+
+        setSubmittingTask(null);
+      };
+
+      const handleApproveReject = async (taskId, newStatus) => {
+        if (!user) return;
+        const { db, appId, doc, updateDoc } = window.FirebaseServices;
+
+        try {
+          const taskDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', taskId);
+          await updateDoc(taskDocRef, { status: newStatus });
+        } catch (e) {
+          console.error("Error updating status:", e);
+        }
+
+        setReviewingTask(null);
+      };
+
+      const filteredTasks = useMemo(() => {
+        return tasks.filter(task => {
+          if (activeTab === 'recurring' && !task.isRecurring) return false;
+          if (activeTab === 'recurring' && recurringFrequency !== 'all' && task.frequency !== recurringFrequency) {
+            return false;
+          }
+
+          const matchesSearch = 
+            (task.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (task.description || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (task.assignee || '').toLowerCase().includes(searchQuery.toLowerCase());
+          
+          const matchesStatus = selectedStatus === 'all' || task.status === selectedStatus;
+          const matchesPriority = selectedPriority === 'all' || task.priority === selectedPriority;
+          const matchesAssignee = selectedAssignee === 'all' || task.assignee === selectedAssignee;
+
+          return matchesSearch && matchesStatus && matchesPriority && matchesAssignee;
+        });
+      }, [tasks, activeTab, recurringFrequency, searchQuery, selectedStatus, selectedPriority, selectedAssignee]);
+
+      return (
+        <div className="min-h-screen flex flex-col font-sans pb-12">
+          {/* Header Bar */}
+          <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="bg-indigo-600 text-white p-2 rounded-xl shadow-md">
+                  <i data-lucide="layers" className="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight flex items-center space-x-2">
+                    <span>Collaborative Workflows</span>
+                    <span className="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase border border-emerald-200">
+                      Live Sync
+                    </span>
+                  </h1>
+                  <p className="text-xs text-slate-500 font-medium">Shared Real-Time Task & Deliverable Tracker</p>
+                </div>
+              </div>
+
+              {/* Room / Board Switcher */}
+              <div className="flex items-center space-x-2">
+                <div className="hidden md:flex items-center space-x-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                  <span className="text-xs font-bold text-slate-500 pl-2">Board Code:</span>
+                  <input
+                    type="text"
+                    value={boardInput || boardId}
+                    onChange={(e) => setBoardInput(e.target.value)}
+                    placeholder="Enter Board ID"
+                    className="text-xs font-bold bg-white px-2 py-1 rounded-lg border border-slate-200 text-slate-800 focus:outline-none w-32"
+                  />
+                  <button
+                    onClick={() => boardInput && setBoardId(boardInput.trim())}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-2.5 py-1 rounded-lg transition-colors"
+                  >
+                    Join
+                  </button>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setEditingTask(null);
+                    setIsModalOpen(true);
+                  }}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 shadow-xs cursor-pointer transition-all"
+                >
+                  <i data-lucide="plus" className="w-4 h-4"></i>
+                  <span>Create Shared Task</span>
+                </button>
+              </div>
+            </div>
+          </header>
+
+          {/* Main Area */}
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full flex flex-col space-y-6">
+            
+            {/* View & Tab Switcher */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
+              <div className="flex space-x-4">
+                <button
+                  onClick={() => setActiveTab('main')}
+                  className={`text-sm font-bold pb-1 border-b-2 transition-all cursor-pointer ${
+                    activeTab === 'main' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500'
+                  }`}
+                >
+                  All Shared Tasks ({tasks.length})
+                </button>
+                <button
+                  onClick={() => setActiveTab('recurring')}
+                  className={`text-sm font-bold pb-1 border-b-2 transition-all cursor-pointer ${
+                    activeTab === 'recurring' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-500'
+                  }`}
+                >
+                  Recurring (Daily / Weekly / Monthly)
+                </button>
+              </div>
+
+              {activeTab === 'main' && (
+                <div className="flex items-center space-x-2 bg-slate-200/60 p-1 rounded-lg self-start sm:self-auto">
+                  <button
+                    onClick={() => setViewMode('kanban')}
+                    className={`px-3 py-1 rounded-md text-xs font-bold ${
+                      viewMode === 'kanban' ? 'bg-white text-indigo-600 shadow-xs' : 'text-slate-600'
+                    }`}
+                  >
+                    Kanban Board
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`px-3 py-1 rounded-md text-xs font-bold ${
+                      viewMode === 'list' ? 'bg-white text-indigo-600 shadow-xs' : 'text-slate-600'
+                    }`}
+                  >
+                    Table List
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Filter Controls */}
+            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs flex flex-wrap items-center justify-between gap-3">
+              <input
+                type="text"
+                placeholder="Search tasks, proof links, names..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="text-xs px-3 py-1.5 border border-slate-200 rounded-lg focus:outline-none w-full sm:w-64"
+              />
+
+              <div className="flex flex-wrap items-center gap-2">
+                <select
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  className="text-xs border border-slate-200 bg-white rounded-lg px-2.5 py-1.5 text-slate-700 font-medium"
+                >
+                  <option value="all">All Stages</option>
+                  {STAGES.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                </select>
+
+                <select
+                  value={selectedPriority}
+                  onChange={(e) => setSelectedPriority(e.target.value)}
+                  className="text-xs border border-slate-200 bg-white rounded-lg px-2.5 py-1.5 text-slate-700 font-medium"
+                >
+                  <option value="all">All Priorities</option>
+                  {Object.keys(PRIORITIES).map(p => <option key={p} value={p}>{PRIORITIES[p].label}</option>)}
+                </select>
+              </div>
+            </div>
+
+            {/* Main Task View Rendering */}
+            {loading ? (
+              <div className="text-center py-16 text-slate-500 font-medium">
+                Syncing shared board with cloud...
+              </div>
+            ) : filteredTasks.length === 0 ? (
+              <div className="bg-white rounded-2xl p-12 text-center border border-slate-200">
+                <p className="text-slate-600 font-bold text-sm">No tasks found on this board.</p>
+                <p className="text-slate-400 text-xs mt-1">Click "Create Shared Task" to add work for your team.</p>
+              </div>
+            ) : viewMode === 'kanban' ? (
+              <KanbanView
+                tasks={filteredTasks}
+                stages={STAGES}
+                onMoveStage={handleMoveStage}
+                onOpenSubmitModal={setSubmittingTask}
+                onOpenReviewModal={setReviewingTask}
+                onEditTask={(task) => { setEditingTask(task); setIsModalOpen(true); }}
+                onDeleteTask={setTaskToDelete}
+              />
+            ) : (
+              <TableView
+                tasks={filteredTasks}
+                stages={STAGES}
+                onMoveStage={handleMoveStage}
+                onOpenSubmitModal={setSubmittingTask}
+                onOpenReviewModal={setReviewingTask}
+                onEditTask={(task) => { setEditingTask(task); setIsModalOpen(true); }}
+                onDeleteTask={setTaskToDelete}
+              />
+            )}
+          </main>
+
+          {/* Modal Components */}
+          {isModalOpen && (
+            <TaskModal
+              task={editingTask}
+              stages={STAGES}
+              onClose={() => { setIsModalOpen(false); setEditingTask(null); }}
+              onSave={handleSaveTask}
+            />
+          )}
+
+          {submittingTask && (
+            <SubmitProofModal
+              task={submittingTask}
+              onClose={() => setSubmittingTask(null)}
+              onSubmit={(data) => handleSubmitEvidence(submittingTask.id, data)}
+            />
+          )}
+
+          {reviewingTask && (
+            <ReviewProofModal
+              task={reviewingTask}
+              onClose={() => setReviewingTask(null)}
+              onApprove={() => handleApproveReject(reviewingTask.id, 'completed')}
+              onReject={() => handleApproveReject(reviewingTask.id, 'in_progress')}
+            />
+          )}
+
+          {taskToDelete && (
+            <DeleteModal
+              taskTitle={taskToDelete.title}
+              onConfirm={confirmDeleteTask}
+              onCancel={() => setTaskToDelete(null)}
+            />
+          )}
+        </div>
+      );
+    }
+
+    function KanbanView({ tasks, stages, onMoveStage, onOpenSubmitModal, onOpenReviewModal, onEditTask, onDeleteTask }) {
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
+          {stages.map(stage => {
+            const stageTasks = tasks.filter(t => t.status === stage.id);
+
+            return (
+              <div key={stage.id} className="bg-slate-200/60 rounded-2xl p-3 border border-slate-200 flex flex-col min-h-[400px]">
+                <div className="flex items-center justify-between pb-3 px-1 border-b border-slate-300/60 mb-3">
+                  <h3 className="font-extrabold text-slate-800 text-xs uppercase tracking-wider">{stage.name}</h3>
+                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-white text-slate-700 shadow-2xs">
+                    {stageTasks.length}
+                  </span>
+                </div>
+
+                <div className="space-y-3 flex-1">
+                  {stageTasks.map(task => (
+                    <div key={task.id} className="bg-white rounded-xl p-3.5 border border-slate-200 shadow-2xs hover:shadow-md transition-all">
+                      
+                      {/* High-Visibility Edit / Delete Bar */}
+                      <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${PRIORITIES[task.priority]?.color || 'bg-slate-100'}`}>
+                          {PRIORITIES[task.priority]?.label || 'Medium'}
+                        </span>
+
+                        <div className="flex items-center space-x-1">
+                          <button
+                            onClick={() => onEditTask(task)}
+                            className="px-2 py-1 bg-indigo-50 border border-indigo-200 text-indigo-700 hover:bg-indigo-100 rounded text-xs font-bold cursor-pointer"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => onDeleteTask(task)}
+                            className="px-2 py-1 bg-rose-50 border border-rose-200 text-rose-700 hover:bg-rose-100 rounded text-xs font-bold cursor-pointer"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+
+                      <h4 className="font-bold text-xs text-slate-900 mb-1">{task.title}</h4>
+                      {task.description && <p className="text-[11px] text-slate-500 mb-2 line-clamp-2">{task.description}</p>}
+
+                      {/* Move Stage Selector */}
+                      <div className="my-2">
+                        <select
+                          value={task.status}
+                          onChange={(e) => onMoveStage(task.id, e.target.value)}
+                          className="w-full text-[11px] font-semibold bg-slate-50 border border-slate-200 rounded-md px-2 py-1 text-slate-700 cursor-pointer"
+                        >
+                          {stages.map(s => <option key={s.id} value={s.id}>Stage: {s.name}</option>)}
+                        </select>
+                      </div>
+
+                      {/* Evidence / Proof Submission Bar */}
+                      <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between">
+                        {task.evidenceUrl || (task.evidenceFiles && task.evidenceFiles.length > 0) ? (
+                          <button
+                            onClick={() => onOpenReviewModal(task)}
+                            className="text-[10px] font-bold bg-indigo-50 border border-indigo-200 text-indigo-700 px-2 py-1 rounded"
+                          >
+                            Proof Attached
+                          </button>
+                        ) : (
+                          <span className="text-[10px] text-amber-600 font-semibold">No proof yet</span>
+                        )}
+
+                        <button
+                          onClick={() => onOpenSubmitModal(task)}
+                          className="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-2xs"
+                        >
+                          Submit Proof
+                        </button>
+                      </div>
+
+                      {/* Footer */}
+                      <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
+                        <span className="font-semibold text-slate-700">Assigned: {task.assignee || 'Anyone'}</span>
+                        {task.dueDate && <span>Due: {task.dueDate}</span>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    function TableView({ tasks, stages, onMoveStage, onOpenSubmitModal, onOpenReviewModal, onEditTask, onDeleteTask }) {
+      return (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase">
+              <tr>
+                <th className="p-3.5">Task Name</th>
+                <th className="p-3.5">Stage</th>
+                <th className="p-3.5">Proof / Deliverable</th>
+                <th className="p-3.5">Name</th>
+                <th className="p-3.5 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {tasks.map(task => (
+                <tr key={task.id} className="hover:bg-slate-50">
+                  <td className="p-3.5 font-bold text-slate-900">{task.title}</td>
+                  <td className="p-3.5">
+                    <select
+                      value={task.status}
+                      onChange={(e) => onMoveStage(task.id, e.target.value)}
+                      className="text-xs border border-slate-200 rounded px-2 py-1 font-semibold"
+                    >
+                      {stages.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                    </select>
+                  </td>
+                  <td className="p-3.5">
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => onOpenSubmitModal(task)}
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded text-[11px]"
+                      >
+                        Submit Proof
+                      </button>
+                      {(task.evidenceUrl || task.evidenceFiles?.length > 0) && (
+                        <button
+                          onClick={() => onOpenReviewModal(task)}
+                          className="bg-indigo-50 border border-indigo-200 text-indigo-700 font-bold px-2 py-1 rounded text-[11px]"
+                        >
+                          View Proof
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                  <td className="p-3.5 font-medium text-slate-700">{task.assignee || 'Unassigned'}</td>
+                  <td className="p-3.5 text-center">
+                    <div className="flex items-center justify-center space-x-1.5">
+                      <button
+                        onClick={() => onEditTask(task)}
+                        className="bg-indigo-50 border border-indigo-200 text-indigo-700 px-2.5 py-1 rounded font-bold"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => onDeleteTask(task)}
+                        className="bg-rose-50 border border-rose-200 text-rose-700 px-2.5 py-1 rounded font-bold"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
+    function TaskModal({ task, stages, onClose, onSave }) {
+      const [title, setTitle] = useState(task?.title || '');
+      const [description, setDescription] = useState(task?.description || '');
+      const [status, setStatus] = useState(task?.status || 'backlog');
+      const [priority, setPriority] = useState(task?.priority || 'medium');
+      const [assignee, setAssignee] = useState(task?.assignee || '');
+      const [dueDate, setDueDate] = useState(task?.dueDate || '');
+      const [isRecurring, setIsRecurring] = useState(task?.isRecurring || false);
+      const [frequency, setFrequency] = useState(task?.frequency || 'daily');
+
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full p-6 space-y-4 text-xs">
+            <h3 className="font-bold text-base text-slate-900">{task ? 'Edit Task' : 'Create Task'}</h3>
+            
+            <div>
+              <label className="font-semibold block mb-1">Task Title *</label>
+              <input
+                type="text"
+                required
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none font-medium text-xs"
+              />
+            </div>
+
+            <div>
+              <label className="font-semibold block mb-1">Description</label>
+              <textarea
+                rows={3}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none font-medium text-xs"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="font-semibold block mb-1">Assigned Name</label>
+                <input
+                  type="text"
+                  value={assignee}
+                  onChange={(e) => setAssignee(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none text-xs"
+                />
+              </div>
+              <div>
+                <label className="font-semibold block mb-1">Due Date</label>
+                <input
+                  type="date"
+                  value={dueDate}
+                  onChange={(e) => setDueDate(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none text-xs"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-2 pt-4 border-t border-slate-100">
+              <button onClick={onClose} className="px-4 py-2 border border-slate-200 rounded-lg font-semibold text-slate-600">Cancel</button>
+              <button 
+                onClick={() => title && onSave({ title, description, status, priority, assignee, dueDate, isRecurring, frequency })} 
+                className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold"
+              >
+                Save Task
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function SubmitProofModal({ task, onClose, onSubmit }) {
+      const [submitterName, setSubmitterName] = useState(task.assignee || '');
+      const [evidenceUrl, setEvidenceUrl] = useState(task.evidenceUrl || '');
+      const [submitterNotes, setSubmitterNotes] = useState(task.submitterNotes || '');
+      const [files, setFiles] = useState([]);
+
+      const handleFileChange = (e) => {
+        const selected = Array.from(e.target.files);
+        setFiles(selected.map(file => ({ rawFile: file, name: file.name })));
+      };
+
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full p-6 space-y-4 text-xs">
+            <h3 className="font-bold text-base text-slate-900">Submit Work Proof</h3>
+            <p className="text-slate-500 font-medium">Task: {task.title}</p>
+
+            <div>
+              <label className="font-semibold block mb-1">Your Name *</label>
+              <input
+                type="text"
+                required
+                value={submitterName}
+                onChange={(e) => setSubmitterName(e.target.value)}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="font-semibold block mb-1">Link to Work / Post / Document</label>
+              <input
+                type="url"
+                placeholder="https://..."
+                value={evidenceUrl}
+                onChange={(e) => setEvidenceUrl(e.target.value)}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="font-semibold block mb-1">Upload Photo or Video Evidence</label>
+              <input
+                type="file"
+                multiple
+                accept="image/*,video/*"
+                onChange={handleFileChange}
+                className="w-full text-xs text-slate-500 border border-slate-200 rounded-lg p-2"
+              />
+            </div>
+
+            <div className="flex justify-end space-x-2 pt-4 border-t border-slate-100">
+              <button onClick={onClose} className="px-4 py-2 border border-slate-200 rounded-lg font-semibold">Cancel</button>
+              <button
+                onClick={() => onSubmit({ submittedBy: submitterName, evidenceUrl, submitterNotes, newFiles: files })}
+                className="px-5 py-2 bg-emerald-600 text-white font-bold rounded-lg"
+              >
+                Upload & Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function ReviewProofModal({ task, onClose, onApprove, onReject }) {
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-xl w-full p-6 space-y-4 text-xs">
+            <h3 className="font-bold text-base text-slate-900">Inspect Submitted Work Proof</h3>
+            
+            <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
+              <p className="font-bold text-slate-800">Submitted by: {task.submittedBy || 'Team Member'}</p>
+              <p className="text-slate-500 mt-0.5">{task.submittedAt || 'Recently'}</p>
+            </div>
+
+            {task.evidenceUrl && (
+              <div>
+                <span className="font-semibold block mb-1">Submitted External Link:</span>
+                <a href={task.evidenceUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-600 font-bold underline">
+                  {task.evidenceUrl}
+                </a>
+              </div>
+            )}
+
+            {task.evidenceFiles?.length > 0 && (
+              <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
+                {task.evidenceFiles.map(f => (
+                  <div key={f.id} className="border rounded-lg overflow-hidden h-24 bg-slate-900">
+                    {f.type?.startsWith('image/') ? (
+                      <img src={f.dataUrl} alt="Proof" className="w-full h-full object-cover" />
+                    ) : (
+                      <video src={f.dataUrl} controls className="w-full h-full object-cover" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="flex justify-between items-center pt-4 border-t border-slate-100">
+              <button onClick={onReject} className="px-4 py-2 bg-rose-50 text-rose-700 border border-rose-200 font-bold rounded-lg">
+                Reject
+              </button>
+              <button onClick={onApprove} className="px-5 py-2 bg-emerald-600 text-white font-bold rounded-lg">
+                Approve & Complete
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function DeleteModal({ taskTitle, onConfirm, onCancel }) {
+      return (
+        <div className="fixed inset-0 z-60 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 max-w-md w-full text-center space-y-4">
+            <h3 className="font-bold text-base text-slate-900">Delete Task?</h3>
+            <p className="text-xs text-slate-500">Are you sure you want to delete "{taskTitle}" from the shared board?</p>
+            <div className="flex justify-center space-x-2">
+              <button onClick={onCancel} className="px-4 py-2 border rounded-lg text-xs font-semibold">Cancel</button>
+              <button onClick={onConfirm} className="px-5 py-2 bg-rose-600 text-white font-bold rounded-lg text-xs">Delete</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Mount React App
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
